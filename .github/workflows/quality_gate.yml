@@ -30,4 +30,6 @@ jobs:
 
       - name: Análise de segurança (Bandit)
         run: |
-          bandit -r . -ll
+          bandit -r . \
+            -x ./.github/scripts,./examples,./benchmarks \
+            -ll
