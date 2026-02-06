@@ -1,0 +1,33 @@
+name: Quality Gate - Python Static Analysis
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup do Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Instalar ferramentas de análise
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 bandit
+
+      - name: Análise de estilo (Flake8)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+      - name: Análise de segurança (Bandit)
+        run: |
+          bandit -r . -ll
